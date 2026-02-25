@@ -28,6 +28,17 @@ export default function SignUpPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+    }
+
+    if (password.length < 8) {
+      setError("password less then 8");
+    }
+
+    setLoading(true);
 
     try {
       const result = await signUp.email({
@@ -41,7 +52,12 @@ export default function SignUpPage() {
       } else {
         router.push("/dashboard");
       }
-    } catch (error) {}
+    } catch (err) {
+      setError("An error occurred during signup");
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
