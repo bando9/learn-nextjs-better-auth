@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { signUp } from "@/lib/auth-client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -25,7 +26,23 @@ export default function SignUpPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async () => {};
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const result = await signUp.email({
+        email,
+        name,
+        password,
+      });
+
+      if (result.error) {
+        setError(result.error.message || "Sign Up failed");
+      } else {
+        router.push("/dashboard");
+      }
+    } catch (error) {}
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
