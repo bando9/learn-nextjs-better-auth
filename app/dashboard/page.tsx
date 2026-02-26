@@ -8,15 +8,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useSession } from "@/lib/auth-client";
-import { signOut } from "better-auth/api";
+import { useSession, signOut } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function DashboardPage() {
   const router = useRouter();
   const { data: session, isPending } = useSession();
-  console.log(session);
 
   useEffect(() => {
     if (!isPending && !session) {
@@ -33,7 +31,11 @@ export default function DashboardPage() {
   }
 
   if (!session) {
-    return null;
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <p>Not logged in</p>
+      </div>
+    );
   }
 
   const handleSignOut = async () => {
