@@ -11,16 +11,42 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
 
-import { useState } from "react";
+import React, { useState } from "react";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
-  const handleSubmit = async () => {};
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    setError("");
+    setSuccess(false);
+    setLoading(true);
+
+    try {
+      const result = await authClient.requestPasswordReset({
+        email,
+        redirectTo: "/reset-password",
+      });
+
+      if (result.error) {
+        setError(result.error.message || "Failed to send reset email");
+      } else {
+        setSuccess(true);
+        console.log("Password reset email sent to:", email);
+      }
+    } catch (err) {
+      setError("An error occured. Please try again.");
+      console.error("Forgot password error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
