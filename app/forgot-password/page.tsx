@@ -38,11 +38,11 @@ export default function ForgotPasswordPage() {
         setError(result.error.message || "Failed to send reset email");
       } else {
         setSuccess(true);
-        console.log("Password reset email sent to:", email);
+        // console.log("Password reset email sent to:", email);
       }
     } catch (err) {
       setError("An error occured. Please try again.");
-      console.error("Forgot password error:", err);
+      // console.error("Forgot password error:", err);
     } finally {
       setLoading(false);
     }
